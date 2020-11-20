@@ -1,4 +1,5 @@
 ﻿<Window x:Class="Texturer.MainWindow"
+        xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -6,6 +7,17 @@
         xmlns:local="clr-namespace:Texturer"
         mc:Ignorable="d"
     Title="MainWindow" Height="487.123" Width="914.085" Background="#FFBBBBBB">
+
+    <Window.Resources>
+        <DataTemplate x:Key="rightPanelTemplate">
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
+                <TextBox Text="{Binding Path=Name}" MinWidth="50" Margin="10,0,0,0" />
+                <Image Name ="Image" MinHeight="40" MaxHeight="40" Source="{Binding Path=ImagePath}" HorizontalAlignment="Left" 
+                       MouseDown="Image_MouseDown" MouseUp="Image_MouseUp" DragOver="Image_DragOver" GiveFeedback="Image_GiveFeedback" />
+                <Separator HorizontalAlignment="Stretch"/>
+            </StackPanel>
+        </DataTemplate>
+    </Window.Resources>
 
     <Grid x:Name="Main" Margin="0,0,0,0">
         <Grid.RowDefinitions>
@@ -21,17 +33,21 @@
         </Grid.ColumnDefinitions>
         <GridSplitter x:Name="gridSplitterVert" Grid.Column="1" HorizontalAlignment="Stretch" Grid.RowSpan="4" MinWidth="10" Background="#FF998686"/>
         <GridSplitter x:Name="gridSplitterHor" Grid.Row="2" Grid.Column="0" MinHeight="10" Background="#FF998686" HorizontalAlignment="Stretch"/>
+        <ScrollViewer Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" HorizontalScrollBarVisibility="Visible" >
+        <Canvas x:Name="MainCanvas" Background="Gray"  AllowDrop="True" ClipToBounds="True" 
+                DragEnter="MainCanvas_DragEnter" Drop="MainCanvas_Drop" MouseMove="MainCanvas_MouseMove" Width="1920" Height="1080" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True"/>
+        </ScrollViewer>
         <Button x:Name="addImageButton" Command="{Binding AddTextureObject}" Content="Add Image" Grid.Column="2" Grid.Row="0" 
                 HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" CommandParameter="{Binding Mode=OneWay}" Click="RightPanelAddTextureObject" />
-        <ScrollBar x:Name="scrollBarRight" Grid.Column="2" Grid.Row="1" Grid.RowSpan="3" HorizontalAlignment="Right" Margin="0,0,0,0" Width="20" MinWidth="20" Panel.ZIndex="1"/>
-        <ListBox x:Name="RightPanelTextureObjects" Grid.Column="2" Grid.Row="1" Grid.RowSpan="3" ItemsSource="{Binding TextureObjects}" Background="#FFBBBBBB">
-            <DockPanel x:Name="rightPanel" Grid.Column="2" Grid.RowSpan="3" Height="20"  Margin="5,5,5,5" VerticalAlignment="Top" Panel.ZIndex="1" >
-                <CheckBox x:Name="rightCheckBox" DockPanel.Dock="Left"/>
-                <TextBox x:Name="rightName" DockPanel.Dock="Left" Text="Name" MinWidth="50" Margin="10,0,0,0" />
-            </DockPanel>
-            <Image x:Name="rightImage"  DockPanel.Dock="Top" MinHeight="40" MaxHeight="40" Source="{Binding txb_FileName}" HorizontalAlignment="Left"/>
-            <Separator/>
+        <ListBox x:Name="RightPanelLB" Grid.Column="2" Grid.Row="1" Grid.RowSpan="3" ItemTemplate="{StaticResource rightPanelTemplate}" 
+                 IsSynchronizedWithCurrentItem="True" SelectionChanged="RightPanelLB_SelectionChanged" Background="#FFBBBBBB" HorizontalContentAlignment="Stretch">
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel />
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
         </ListBox>
+        <TextBox x:Name="textBox" HorizontalAlignment="Left" Height="23" Margin="10,10,0,0" Grid.Row="3" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="440"/>
 
     </Grid>
 </Window>

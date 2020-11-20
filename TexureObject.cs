@@ -8,12 +8,12 @@ using System.Runtime.CompilerServices;
 
 namespace Texturer
 {
-    class TexureObject : INotifyPropertyChanged
+    public class TextureObject : INotifyPropertyChanged
     {
         private string name;
-        private string path;
+        private Uri imagepath;
         public string Name { get => name; set => name = value; }
-        public string Path { get => path; set => path = value; }
+        public Uri ImagePath { get => imagepath; set => imagepath = value; }
 
 
         public event PropertyChangedEventHandler PropertyChanged;
